@@ -125,31 +125,38 @@
                         <h3 class="container-title">Landing Site Analysis</h3>
 
                         <form method="post">
-                            <div class="row g-4">
-                                <div class="col-md-6 col-lg-3">
-                                    <label for="landing-site" class="form-label">Select Landing Region</label>
-                                    <select name="landing_site" id="landing-site" class="form-select" required>
-                                        <option value="">Choose...</option>
-                                        <option value="Connecting Ridge">Connecting Ridge</option>
-                                        <option value="Shackleton">Shackleton</option>
-                                        <option value="Pear Near Shackleton">Pear Near Shackleton</option>
-                                        <option value="de Gerlache Rim">de Gerlache Rim</option>
-                                        <option value="Leibnitz Beta Plateau">Leibnitz Beta Plateau</option>
-                                        <option value="Malapert Massif">Malapert Massif</option>
-                                    </select>
+                            <div class="row g-3 align-items-end">
+                                <div class="col-6 col-md-4 col-xl">
+                                    <label for="latitude" class="form-label">Latitude (°, −90 to 90)</label>
+                                    <input type="number" name="latitude" id="latitude" class="form-control" min='-90' max='90' placeholder='-88.8' required>
                                 </div>
 
-                                <div class="col-md-6 col-lg-3">
-                                    <label for="date" class="form-label">Analysis Date</label>
-                                    <input type="date" name="date" id="date" class="form-control" required>
+                                <div class="col-6 col-md-4 col-xl">
+                                    <label for="longitude" class="form-label">Longitude (°)</label>
+                                    <input type="number" name="longitude" id="longitude" class="form-control" min='-180' max='180' placeholder='132' required>
                                 </div>
 
-                                <div class="col-md-6 col-lg-3">
-                                    <label for="time" class="form-label">Analysis Time</label>
-                                    <input type="time" name="time" id="time" class="form-control" required>
+                                <div class="col-6 col-md-4 col-xl">
+                                    <label for="start-date" class="form-label">Start Date</label>
+                                    <input type="date" name="start_date" id="start-date" class="form-control" required>
                                 </div>
 
-                                <div class="col-md-6 col-lg-3 text-end">
+                                <div class="col-6 col-md-4 col-xl">
+                                    <label for="end-date" class="form-label">End Date</label>
+                                    <input type="date" name="end_date" id="end-date" class="form-control" required>
+                                </div>
+
+                                <div class="col-6 col-md-4 col-xl">
+                                    <label for="start-time" class="form-label">Start Time (UTC)</label>
+                                    <input type="time" name="start_time" id="start-time" class="form-control" required>
+                                </div>
+
+                                <div class="col-6 col-md-4 col-xl">
+                                    <label for="end-time" class="form-label">End Time (UTC)</label>
+                                    <input type="time" name="end_time" id="end-time" class="form-control" required>
+                                </div>
+
+                                <div class="col-12 col-xl-auto">
                                     <button type="submit" class="btn btn-primary mt-4"><i class="bi bi-rocket-takeoff"></i> Analyze Site</button>
                                 </div>
                             </div>
@@ -270,17 +277,20 @@
                             <div id="lunar-coordinates" class="lunar-coordinates">
                                 Move your cursor over the map to see coordinates.
                             </div>
+                            <div id="selected-site-info" class="lunar-coordinates">
+                                No landing site selected.
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-lg-4">
-                        <div class="public-container mb-4 rounded">
-                            <h3 class="container-title">Sunlight</h3>
-                        </div>
+                <div class="col-lg-4">
+                    <div class="public-container mb-4 rounded">
+                        <h3 class="container-title">Sunlight</h3>
+                    </div>
 
-                        <div class="public-container mb-4 rounded">
-                            <h3 class="container-title">Earth Visibility</h3>
-                        </div>
+                    <div class="public-container mb-4 rounded">
+                        <h3 class="container-title">Earth Visibility</h3>
                     </div>
                 </div>
             </div>

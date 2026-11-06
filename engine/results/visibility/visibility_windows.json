@@ -1,0 +1,105 @@
+{
+    "analysis": {
+        "total_samples": 8354,
+        "sampling_interval_minutes": 10,
+        "conditions_analyzed": [
+            "SUN_TERRAIN_VISIBILITY",
+            "SUN_SURFACE_ILLUMINATION",
+            "EARTH_TERRAIN_VISIBILITY"
+        ],
+        "window_count": 9,
+        "duration_definition": "Time between the first and last samples in each window; actual transition times are between sampled timestamps."
+    },
+    "windows": [
+        {
+            "body": "SUN",
+            "condition": "TERRAIN_VISIBILITY",
+            "status": "BLOCKED",
+            "start_utc": "2027-01-01T00:00:00",
+            "end_utc": "2027-01-07T21:40:00",
+            "duration_minutes": 9940.0,
+            "sample_count": 995,
+            "minimum_visibility_margin_degrees": -4.199683
+        },
+        {
+            "body": "SUN",
+            "condition": "TERRAIN_VISIBILITY",
+            "status": "VISIBLE",
+            "start_utc": "2027-01-07T21:50:00",
+            "end_utc": "2027-01-22T23:50:00",
+            "duration_minutes": 21720.0,
+            "sample_count": 2173,
+            "minimum_visibility_margin_degrees": 0.006922
+        },
+        {
+            "body": "SUN",
+            "condition": "TERRAIN_VISIBILITY",
+            "status": "BLOCKED",
+            "start_utc": "2027-01-23T00:00:00",
+            "end_utc": "2027-01-30T00:00:00",
+            "duration_minutes": 10080.0,
+            "sample_count": 1009,
+            "minimum_visibility_margin_degrees": -4.973985
+        },
+        {
+            "body": "SUN",
+            "condition": "SURFACE_ILLUMINATION",
+            "status": "NOT_ILLUMINATED",
+            "start_utc": "2027-01-01T00:00:00",
+            "end_utc": "2027-01-07T21:40:00",
+            "duration_minutes": 9940.0,
+            "sample_count": 995,
+            "minimum_visibility_margin_degrees": null
+        },
+        {
+            "body": "SUN",
+            "condition": "SURFACE_ILLUMINATION",
+            "status": "ILLUMINATED",
+            "start_utc": "2027-01-07T21:50:00",
+            "end_utc": "2027-01-21T09:00:00",
+            "duration_minutes": 19390.0,
+            "sample_count": 1940,
+            "minimum_visibility_margin_degrees": null
+        },
+        {
+            "body": "SUN",
+            "condition": "SURFACE_ILLUMINATION",
+            "status": "NOT_ILLUMINATED",
+            "start_utc": "2027-01-21T09:10:00",
+            "end_utc": "2027-01-30T00:00:00",
+            "duration_minutes": 12410.0,
+            "sample_count": 1242,
+            "minimum_visibility_margin_degrees": null
+        },
+        {
+            "body": "EARTH",
+            "condition": "TERRAIN_VISIBILITY",
+            "status": "BLOCKED",
+            "start_utc": "2027-01-01T00:00:00",
+            "end_utc": "2027-01-11T05:50:00",
+            "duration_minutes": 14750.0,
+            "sample_count": 1476,
+            "minimum_visibility_margin_degrees": -6.713823
+        },
+        {
+            "body": "EARTH",
+            "condition": "TERRAIN_VISIBILITY",
+            "status": "VISIBLE",
+            "start_utc": "2027-01-11T06:00:00",
+            "end_utc": "2027-01-23T14:10:00",
+            "duration_minutes": 17770.0,
+            "sample_count": 1778,
+            "minimum_visibility_margin_degrees": 0.002723
+        },
+        {
+            "body": "EARTH",
+            "condition": "TERRAIN_VISIBILITY",
+            "status": "BLOCKED",
+            "start_utc": "2027-01-23T14:20:00",
+            "end_utc": "2027-01-30T00:00:00",
+            "duration_minutes": 9220.0,
+            "sample_count": 923,
+            "minimum_visibility_margin_degrees": -6.667566
+        }
+    ]
+}

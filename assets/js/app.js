@@ -266,3 +266,50 @@ document.getElementById('search')
             searchLunarFeature();
         }
     });
+
+const selectedSiteSource = new ol.source.Vector();
+
+const selectedSiteLayer = new ol.layer.Vector({
+    source: selectedSiteSource,
+    style: new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 9,
+            fill: new ol.style.Fill({
+                color: '#00E5FF'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#FFFFFF',
+                width: 2
+            })
+        })
+    })
+});
+
+lunarMap.addLayer(selectedSiteLayer);
+
+const selectedSiteInfo = document.getElementById('selected-site-info');
+
+lunarMap.on('click', function (event) {
+
+    const mapCoordinates = event.coordinate;
+
+    const geographicCoordinates = proj4(
+        'IAU2000:30120',
+        'EPSG:4326',
+        mapCoordinates
+    );
+
+    const longitude = geographicCoordinates[0];
+    const latitude = geographicCoordinates[1];
+
+    selectedSiteSource.clear();
+
+    const selectedMarker = new ol.Feature({
+        geometry: new ol.geom.Point(mapCoordinates)
+    });
+
+    selectedSiteSource.addFeature(selectedMarker);
+
+    selectedSiteInfo.textContent =
+        `Selected Site — Latitude: ${latitude.toFixed(4)}° | Longitude: ${longitude.toFixed(4)}°`;
+});

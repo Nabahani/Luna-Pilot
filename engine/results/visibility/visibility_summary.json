@@ -1,0 +1,29 @@
+{
+    "sun": {
+        "total_samples": 4177,
+        "terrain_visible_samples": 2173,
+        "terrain_blocked_samples": 2004,
+        "terrain_visibility_percentage": 52.02
+    },
+    "earth": {
+        "total_samples": 4177,
+        "terrain_visible_samples": 1778,
+        "terrain_blocked_samples": 2399,
+        "terrain_visibility_percentage": 42.57
+    },
+    "surface_illumination": {
+        "total_samples": 4177,
+        "illuminated_samples": 1940,
+        "not_illuminated_samples": 2237,
+        "illumination_percentage": 46.44
+    },
+    "analysis": {
+        "landing_latitude": -85.0,
+        "landing_longitude": 90.0,
+        "terrain_horizon_range_metres": 5000,
+        "horizon_directions": 360,
+        "azimuth_interpolation": "Linear circular interpolation",
+        "coordinate_alignment_assumption": "Geographic azimuth converted to DEM projected azimuth using the landing-site longitude and the DEM's south polar stereographic projection.",
+        "visibility_definition": "Body centre is visible when its elevation is greater than the terrain horizon angle"
+    }
+}

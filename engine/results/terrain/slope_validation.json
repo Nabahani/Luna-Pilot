@@ -1,0 +1,21 @@
+{
+    "method": "Central differences using valid centre and four neighbours",
+    "pixel_resolution_metres": {
+        "x": 80.0,
+        "y": 80.0
+    },
+    "landing_site": {
+        "row": 63,
+        "column": 63,
+        "slope_degrees": 20.649751663208008
+    },
+    "slope_statistics": {
+        "minimum_degrees": 0.11262164264917374,
+        "maximum_degrees": 35.48028564453125,
+        "mean_degrees": 17.654224395751953,
+        "median_degrees": 17.51569175720215,
+        "valid_pixels": 15376,
+        "total_pixels": 15876,
+        "valid_percentage": 96.85059208868732
+    }
+}

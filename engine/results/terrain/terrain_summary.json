@@ -1,0 +1,27 @@
+{
+    "landing_site": {
+        "latitude": -85.0,
+        "longitude": 90.0,
+        "projected_x_metres": 151713.04441849753,
+        "projected_y_metres": 9.289744711800661e-12,
+        "elevation_metres": -3721.86376953125
+    },
+    "extraction": {
+        "area_width_pixels": 126,
+        "area_height_pixels": 126,
+        "pixel_resolution_metres": 80.0,
+        "valid_pixels": 15876
+    },
+    "elevation_metres": {
+        "minimum": -3913.875244140625,
+        "maximum": -3683.78271484375,
+        "mean": -3739.737060546875,
+        "median": -3733.3564453125
+    },
+    "slope_degrees": {
+        "minimum": 0.022539911791682243,
+        "maximum": 25.038400650024414,
+        "mean": 4.182428359985352,
+        "median": 2.6705431938171387
+    }
+}
