@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -124,40 +123,36 @@
                     <div class="public-container rounded">
                         <h3 class="container-title">Landing Site Analysis</h3>
 
-                        <form method="post">
+                        <form id="landing-form">
                             <div class="row g-3 align-items-end">
                                 <div class="col-6 col-md-4 col-xl">
                                     <label for="latitude" class="form-label">Latitude (°, −90 to 90)</label>
-                                    <input type="number" name="latitude" id="latitude" class="form-control" min='-90' max='90' placeholder='-88.8' required>
+                                    <input type="number" step="any" name="latitude" id="latitude" class="form-control" min='-90' max='90' placeholder='-88.8' required>
                                 </div>
 
                                 <div class="col-6 col-md-4 col-xl">
                                     <label for="longitude" class="form-label">Longitude (°)</label>
-                                    <input type="number" name="longitude" id="longitude" class="form-control" min='-180' max='180' placeholder='132' required>
+                                    <input type="number" step="any" name="longitude" id="longitude" class="form-control" min='-180' max='180' placeholder='132' required>
                                 </div>
 
-                                <div class="col-6 col-md-4 col-xl">
-                                    <label for="start-date" class="form-label">Start Date</label>
-                                    <input type="date" name="start_date" id="start-date" class="form-control" required>
+                                <div class="col-12 col-md-4 col-xl">
+                                    <label for="start" class="form-label">Analysis Start (UTC)</label>
+                                    <input type="datetime-local" name="analysis_start" id="start" class="form-control" required>
                                 </div>
 
-                                <div class="col-6 col-md-4 col-xl">
-                                    <label for="end-date" class="form-label">End Date</label>
-                                    <input type="date" name="end_date" id="end-date" class="form-control" required>
+                                <div class="col-12 col-md-4 col-xl">
+                                    <label for="end" class="form-label">Analysis End (UTC)</label>
+                                    <input type="datetime-local" name="analysis_end" id="end" class="form-control" required>
                                 </div>
 
-                                <div class="col-6 col-md-4 col-xl">
-                                    <label for="start-time" class="form-label">Start Time (UTC)</label>
-                                    <input type="time" name="start_time" id="start-time" class="form-control" required>
-                                </div>
+                                <div class="col-12 col-md-8 col-xl">
+                                    <button type="submit" id="submit-btn" name="analyze" class="btn btn-primary w-100 d-block mt-4">
+                                        <img src="assets/images/spinner.gif" alt="" id="form-spinner" class="d-none" style="width: 40px;">
 
-                                <div class="col-6 col-md-4 col-xl">
-                                    <label for="end-time" class="form-label">End Time (UTC)</label>
-                                    <input type="time" name="end_time" id="end-time" class="form-control" required>
-                                </div>
-
-                                <div class="col-12 col-xl-auto">
-                                    <button type="submit" class="btn btn-primary mt-4"><i class="bi bi-rocket-takeoff"></i> Analyze Site</button>
+                                        <span id="btn-content">
+                                            <i class="bi bi-rocket-takeoff"></i> Analyze Site
+                                        </span>
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -273,12 +268,14 @@
                                 </div>
                             </div>
 
-                            <div id="lunar-map" class="lunar-map-display"></div>
-                            <div id="lunar-coordinates" class="lunar-coordinates">
-                                Move your cursor over the map to see coordinates.
-                            </div>
-                            <div id="selected-site-info" class="lunar-coordinates">
-                                No landing site selected.
+                            <div id="map">
+                                <div id="lunar-map" class="lunar-map-display"></div>
+                                <div id="lunar-coordinates" class="lunar-coordinates">
+                                    Move your cursor over the map to see coordinates.
+                                </div>
+                                <div id="selected-site-info" class="lunar-coordinates">
+                                    No landing site selected.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -286,17 +283,240 @@
 
                 <div class="col-lg-4">
                     <div class="public-container mb-4 rounded">
-                        <h3 class="container-title">Sunlight</h3>
+                        <h3 class="container-title"><i class="bi bi-brightness-high container-icon"></i> Sunlight</h3>
+
+                        <div class="message text-center">
+                            <i class="bi bi-geo-alt"></i>
+
+                            <h3>No site selected</h3>
+                            <p>Enter coordinates or click a site on the map, then choose Analyse site.</p>
+                        </div>
+
+                        <div class="loading my-5 d-none text-center">
+                            <img src="/LunaPilot/assets/images/loading.gif" alt="" class="" style="width: 100px;">
+                        </div>
+
+                        <div class="hidden-container" style="display: none;">
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <div class="light-container">
+                                        <span id="sunlight-duration" class="analysis-number"></span>
+                                        <span class="analysis-text">Sunlight</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="light-container">
+                                        <span id="darkness-duration" class="analysis-number"></span>
+                                        <span class="analysis-text">Darkness</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="light-container">
+                                        <span id="sunlight-elevation" class="analysis-number"></span>
+                                        <span class="analysis-text">Sun Elevation</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <label class="form-label mt-3">Solar Availability <span id="sunlight-percent"></span>%</label>
+                            <div class="bar-parent">
+                                <div id="sunlight-bar" class="gold-bar"></div>
+                            </div>
+
+                            <label class="form-label mt-3">Sunlight Timeline</label>
+
+                            <div id="sunlight-timeline" class="timeline-blocks"></div>
+
+                            <div class="timeline-labels">
+                                <span>Start</span>
+                                <span>Mid</span>
+                                <span>End</span>
+                            </div>
+                        </div>
                     </div>
 
+                    <div class="public-container rounded">
+                        <h3 class="container-title"><i class="bi bi-globe-europe-africa container-icon"></i> Earth Visibility</h3>
+
+                        <div class="message text-center">
+                            <i class="bi bi-geo-alt"></i>
+
+                            <h3>No site selected</h3>
+                            <p>Enter coordinates or click a site on the map, then choose Analyse site.</p>
+                        </div>
+
+                        <div class="loading my-5 d-none text-center">
+                            <img src="/LunaPilot/assets/images/loading.gif" alt="" class="" style="width: 100px;">
+                        </div>
+
+                        <div class="hidden-container" style="display: none;">
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <div class="light-container">
+                                        <span id="earth-visibility-duration" class="analysis-number"></span>
+                                        <span class="analysis-text">Earth Visibility</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="light-container">
+                                        <span id="earth-blackout-duration" class="analysis-number"></span>
+                                        <span class="analysis-text">Comm. Blackout</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="light-container">
+                                        <span id="earth-comm-number" class="analysis-number"></span>
+                                        <span class="analysis-text">Comm. Windows</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <label class="form-label mt-3">Earth Visibility <span id="earth-percent"></span>%</label>
+                            <div class="bar-parent">
+                                <div id="earth-bar" class="blue-bar"></div>
+                            </div>
+
+                            <label class="form-label mt-3">Communication Windows Timeline <span id="comm-duration"></span></label>
+
+                            <div id="comm-windows-timeline" class="timeline-blocks"></div>
+
+                            <div class="timeline-labels">
+                                <span>Start</span>
+                                <span>Mid</span>
+                                <span>End</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
                     <div class="public-container mb-4 rounded">
-                        <h3 class="container-title">Earth Visibility</h3>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h3 class="container-title mb-0">Site Comparison</h3>
+
+                            <button type="button" class="btn btn-sm btn-primary" id="add-site" data-bs-toggle="modal" data-bs-target="#site-modal">
+                                <i class=" bi bi-plus-circle me-1"></i> Add Landing Site
+                            </button>
+                        </div>
+
+                        <div class="comparison-message text-center">
+                            <i class="bi bi-columns-gap"></i>
+
+                            <h3>Compare at least two sites</h3>
+                            <p>Add a landing site here. You can compare up to three.</p>
+                        </div>
+
+                        <div class="comparison-loading my-5 d-none text-center">
+                            <img src="/LunaPilot/assets/images/loading.gif" alt="" class="" style="width: 100px;">
+                        </div>
+
+                        <div class="comparison d-none">
+                            <div class="row g-4 mt-3">
+                                <div class="col-lg-6">
+                                    <div class="chart-container">
+                                        <canvas id="comparison-chart"></canvas>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Landing Site</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>Sun Elevation</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Sunlight Duration</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Darkness Duration</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Solar Availability</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Communication Windows</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Communication Duration</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Communication Availability</th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 
 
+
+    <div class="modal modal-xl fade" id="site-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header custom-border">
+                    <h5 class="modal-title" id="exampleModalLabel">Add a site to compare</h5>
+                    <button type="button" class="btn-close white-color" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-lg-7">
+                            <div id="comparison-map"></div>
+                            <div id="lunar-coordinates-2" class="lunar-coordinates">
+                                Move your cursor over the map to see coordinates.
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5">
+                            <form id="comparison-form">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-6">
+                                        <label for="comparison-latitude" class="form-label">Latitude (°, −90 to 90)</label>
+                                        <input type="number" step="any" name="latitude" id="comparison-latitude" class="form-control" min='-90' max='90' placeholder='-88.8' required>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label for="comparison-longitude" class="form-label">Longitude (°)</label>
+                                        <input type="number" step="any" name="longitude" id="comparison-longitude" class="form-control" min='-180' max='180' placeholder='132' required>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label for="analysis-start" class="form-label">Start Date</label>
+                                        <input type="datetime-local" name="analysis_start" id="analysis-start" class="form-control" required>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label for="analysis-end" class="form-label">End Date</label>
+                                        <input type="datetime-local" name="analysis_end" id="analysis-end" class="form-control" required>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button type="submit" name="analyze" data-bs-dismiss="modal" class="btn btn-primary w-100 mb-3 mt-3"><i class="bi bi-plus-circle"></i> Add to comparison</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/proj4@2.19.10/dist/proj4.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/ol@10.4.0/dist/ol.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
