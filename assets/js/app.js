@@ -25,6 +25,7 @@ const comparisonLoading = document.querySelector('.comparison-loading');
 
 const theadEl = document.querySelector('thead');
 const theadRow = theadEl.querySelector('tr');
+const tbodyEl = document.getElementById('comparison-body');
 
 function formatDuration(hours) {
     const wholeHours = Math.floor(hours);
@@ -130,6 +131,43 @@ function renderCommWindowsTimeline(earth) {
     }
 }
 
+function updateComparisonTable(results) {
+
+    tbodyEl.querySelectorAll('tr').forEach(row => {
+        row.querySelectorAll('td').forEach(td => td.remove());
+    });
+
+    results.forEach((result) => {
+
+        const analysisValues = {
+            'sun-elevation': `${result.sun_analysis.elevation}°`,
+            'sunlight-duration': formatDuration(result.sun_analysis.visibility),
+            'darkness-duration': formatDuration(result.sun_analysis.darkness),
+            'solar-availability': `${result.sun_analysis.availability}%`,
+            'communication-windows': result.earth_analysis.communication_windows_count,
+            'communication-duration': formatDuration(result.earth_analysis.communication_duration),
+            'communication-availability': `${result.earth_analysis.visibility_percentage}%`
+        };
+
+        Object.entries(analysisValues).forEach(([analysis, value]) => {
+
+            const row = tbodyEl.querySelector(
+                `[data-analysis="${analysis}"]`
+            );
+
+            if (!row) return;
+
+            const td = document.createElement('td');
+
+            td.textContent = value ?? 'N/A';
+
+            row.appendChild(td);
+        });
+
+    });
+}
+
+
 landingForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -212,10 +250,12 @@ const comparisonData = [];
 const comparisonResult = [];
 let sites = [];
 
-comparisonForm.addEventListener('submit', (event) => {
+
+comparisonForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const formData = new FormData(comparisonForm);
+
     comparisonData.push({
         latitude: formData.get('latitude'),
         longitude: formData.get('longitude'),
@@ -229,42 +269,77 @@ comparisonForm.addEventListener('submit', (event) => {
         comparisonContainer.classList.add('d-none');
         comparisonLoading.classList.remove('d-none');
 
-        comparisonData.forEach(async (data) => {
+        try {
 
-            console.log(Object.entries(data));
-            console.log(data);
+            const results = await Promise.all(
+                comparisonData.map(async (data) => {
 
-            const response = await fetch('result/landing-site-analysis.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+                    console.log(Object.entries(data));
+                    console.log(data);
 
-            const result = await response.json();
-            comparisonResult.push(result);
+                    const response = await fetch('result/landing-site-analysis.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
 
-            sites.push(`Site ${String.fromCharCode(65 + sites.length)}`);
+                    if (!response.ok) {
+                        throw new Error(`Analysis failed: ${response.status}`);
+                    }
+
+                    return await response.json();
+                })
+            );
+
+            comparisonResult.length = 0;
+            comparisonResult.push(...results);
+
+            sites = results.map((_, index) =>
+                `Site ${String.fromCharCode(65 + index)}`
+            );
+
             comparisonChart.data.labels = sites;
 
             comparisonChart.data.datasets[0].data =
-                comparisonResult.map(item => item.sun_analysis.availability);
+                results.map(item => item.sun_analysis.availability);
 
             comparisonChart.data.datasets[1].data =
-                comparisonResult.map(item => item.earth_analysis.visibility_percentage);
+                results.map(item => item.earth_analysis.visibility_percentage);
 
             comparisonChart.update();
+
+            updateComparisonTable(results);
+
+            theadRow.querySelectorAll('[data-comparison-site]').forEach(th => {
+                th.remove();
+            });
+
+            sites.forEach((site) => {
+                const thEl = document.createElement('th');
+                thEl.textContent = site;
+                thEl.dataset.comparisonSite = 'true';
+                theadRow.appendChild(thEl);
+            });
+
             comparisonLoading.classList.add('d-none');
             comparisonContainer.classList.remove('d-none');
-            const thEl = document.createElement('th');
-            thEl.textContent = `Site ${String.fromCharCode(64 + sites.length)}`;
-            theadRow.appendChild(thEl);
-        });
 
-        console.log(comparisonResult);
+            console.log(comparisonResult);
+
+        } catch (error) {
+
+            console.error('Comparison error:', error);
+            comparisonLoading.classList.add('d-none');
+
+            if (comparisonResult.length > 0) {
+                comparisonContainer.classList.remove('d-none');
+            }
+        }
     }
 });
+
 
 
 proj4.defs(
@@ -794,7 +869,6 @@ const comparisonChart = new Chart(chartContainer, {
                 max: 100,
 
                 ticks: {
-                    stepSize: 50,
                     color: '#8E9BB8',
 
                     font: {

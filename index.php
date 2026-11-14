@@ -416,39 +416,45 @@
 
                         <div class="comparison d-none">
                             <div class="row g-4 mt-3">
-                                <div class="col-lg-6">
+                                <div class="col">
                                     <div class="chart-container">
                                         <canvas id="comparison-chart"></canvas>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-6">
+                                <div class="col">
                                     <table class="table">
                                         <thead>
                                             <tr>
                                                 <th>Landing Site</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
+                                        <tbody id="comparison-body">
+                                            <tr data-analysis="sun-elevation">
                                                 <th>Sun Elevation</th>
                                             </tr>
-                                            <tr>
+
+                                            <tr data-analysis="sunlight-duration">
                                                 <th>Sunlight Duration</th>
                                             </tr>
-                                            <tr>
+
+                                            <tr data-analysis="darkness-duration">
                                                 <th>Darkness Duration</th>
                                             </tr>
-                                            <tr>
+
+                                            <tr data-analysis="solar-availability">
                                                 <th>Solar Availability</th>
                                             </tr>
-                                            <tr>
+
+                                            <tr data-analysis="communication-windows">
                                                 <th>Communication Windows</th>
                                             </tr>
-                                            <tr>
+
+                                            <tr data-analysis="communication-duration">
                                                 <th>Communication Duration</th>
                                             </tr>
-                                            <tr>
+
+                                            <tr data-analysis="communication-availability">
                                                 <th>Communication Availability</th>
                                             </tr>
                                         </tbody>
