@@ -251,16 +251,50 @@ const comparisonResult = [];
 let sites = [];
 
 
+
 comparisonForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const formData = new FormData(comparisonForm);
 
+    const latitude = Number(formData.get('latitude'));
+    const longitude = Number(formData.get('longitude'));
+    const analysisStart = formData.get('analysis_start');
+    const analysisEnd = formData.get('analysis_end');
+
+
+    if (
+        latitude < -90 || latitude > -80 ||
+        longitude < -180 || longitude > 180
+    ) {
+        comparisonMessageContainer.classList.remove('d-none');
+        comparisonMessageContainer.innerHTML = `
+            <p>
+                Please choose a landing site in the Moon’s South Pole region.
+                The latitude should be between -90° and about -80°.
+                The longitude should be between -180° and 180°.
+            </p>
+        `;
+
+        return;
+    }
+
+    if (new Date(analysisEnd) <= new Date(analysisStart)) {
+        comparisonMessageContainer.classList.remove('d-none');
+        comparisonMessageContainer.innerHTML = `
+            <p>
+                The analysis end must be after the analysis start.
+            </p>
+        `;
+
+        return;
+    }
+
     comparisonData.push({
-        latitude: formData.get('latitude'),
-        longitude: formData.get('longitude'),
-        analysis_start: formData.get('analysis_start'),
-        analysis_end: formData.get('analysis_end'),
+        latitude,
+        longitude,
+        analysis_start: analysisStart,
+        analysis_end: analysisEnd,
     });
 
     if (comparisonData.length >= 2) {
@@ -273,9 +307,6 @@ comparisonForm.addEventListener('submit', async (event) => {
 
             const results = await Promise.all(
                 comparisonData.map(async (data) => {
-
-                    console.log(Object.entries(data));
-                    console.log(data);
 
                     const response = await fetch('result/landing-site-analysis.php', {
                         method: 'POST',
@@ -325,8 +356,6 @@ comparisonForm.addEventListener('submit', async (event) => {
 
             comparisonLoading.classList.add('d-none');
             comparisonContainer.classList.remove('d-none');
-
-            console.log(comparisonResult);
 
         } catch (error) {
 
