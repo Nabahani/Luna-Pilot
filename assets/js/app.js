@@ -160,6 +160,7 @@ function updateComparisonTable(results) {
             const td = document.createElement('td');
 
             td.textContent = value ?? 'N/A';
+            td.classList.add('tdata');
 
             row.appendChild(td);
         });
@@ -351,6 +352,7 @@ comparisonForm.addEventListener('submit', async (event) => {
                 const thEl = document.createElement('th');
                 thEl.textContent = site;
                 thEl.dataset.comparisonSite = 'true';
+                thEl.classList.add('thead');
                 theadRow.appendChild(thEl);
             });
 

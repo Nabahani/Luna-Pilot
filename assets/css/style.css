@@ -288,7 +288,7 @@ h3,
 }
 
 .form-control::-webkit-calendar-picker-indicator {
-    filter: invert(.8)
+    filter: invert(.8);
 }
 
 .container-title2 {
@@ -449,6 +449,15 @@ h3,
 
 .detail i:hover {
     color: var(--bad);
+}
+
+table .thead {
+    font-size: 14px;
+    color: var(--mute);
+}
+
+table .tdata {
+    font-size: .78rem;
 }
 
 @media (max-width:575px) {
