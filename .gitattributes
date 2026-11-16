@@ -1,1 +1,2 @@
+*.tiff filter=lfs diff=lfs merge=lfs -text
 engine/data/terrain/LDEM_80S_80MPP_ADJ.tiff filter=lfs diff=lfs merge=lfs -text
